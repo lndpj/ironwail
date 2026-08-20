@@ -1127,7 +1127,7 @@ void Draw_SetClipRect (float x, float y, float width, float height)
 	vclamp(4,pos,0.f,1.f);
 	vfma(4,dim,pos,dim,half);
 	vadd(4,glpos,glpos,dim);
-	vfloor(4,glpos);
+	vfloor(4,pos,glpos);
 
 	Draw_Flush ();
 	glEnable (GL_SCISSOR_TEST);

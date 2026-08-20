@@ -76,11 +76,11 @@ for(size_t i = 0; i < n; i++) \
 	(dst)[i] = (__typeof__(__VA_ARGS__)[]){ __VA_ARGS__ }[i]; \
 } while (0)
 
-#define vfloor(n,dst) \
+#define vfloor(n,dst,src) \
 do { \
 _Pragma("omp simd") \
 for(size_t i = 0; i < n; i++) \
-	(dst)[i] = (typeof((dst)[0]))floor((double)((dst)[i])); \
+	(dst)[i] = (typeof((dst)[0]))floor((double)((src)[i])); \
 } while(0)
 
 #define vclamp(n,dst,minval,maxval) \
