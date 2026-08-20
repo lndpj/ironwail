@@ -1,5 +1,5 @@
 # quake-simd
-A quake engine fork of ironwail focusing on SIMD transision and code clean up
+A quake engine fork of ironwail focusing on SIMD transition and code clean up
 
 # What's this?
 A fork of the popular [ironwail](https://github.com/andrei-drexler)
