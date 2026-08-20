@@ -110,9 +110,9 @@ typedef struct
 } glpic_t;
 
 typedef struct guivertex_t {
-	float		pos[2];
-	float		uv[2];
-	byte		color[4];
+	vec2f_t		pos;
+	vec2f_t		uv;
+	rgba8888_t	color;
 } guivertex_t;
 
 #define MAX_BATCH_QUADS 2048
@@ -137,8 +137,8 @@ typedef struct cachepic_s
 } cachepic_t;
 
 #define	MAX_CACHED_PICS		512	//Spike -- increased to avoid csqc issues.
-cachepic_t	menu_cachepics[MAX_CACHED_PICS];
-int			menu_numcachepics;
+cachepic_t menu_cachepics[MAX_CACHED_PICS];
+int32_t    menu_numcachepics;
 
 //  scrap allocation
 //  Allocate all the little status bar obejcts into a single texture
@@ -154,11 +154,11 @@ int			menu_numcachepics;
 #define	MAX_SCRAP_WIDTH		128
 #define	MAX_SCRAP_HEIGHT	128
 
-int			scrap_allocated[MAX_SCRAPS][BLOCK_WIDTH];
-byte		scrap_texels[SCRAP_ATLAS_WIDTH*SCRAP_ATLAS_HEIGHT];
-qboolean	scrap_dirty;
-gltexture_t	*scrap_texture; //johnfitz
-gltexture_t	*winquakemenubg;
+int          scrap_allocated[MAX_SCRAPS][BLOCK_WIDTH];
+byte         scrap_texels[SCRAP_ATLAS_WIDTH*SCRAP_ATLAS_HEIGHT];
+qboolean     scrap_dirty;
+gltexture_t *scrap_texture; //johnfitz
+gltexture_t *winquakemenubg;
 
 
 /*
@@ -267,8 +267,8 @@ Scrap_Compatible
 */
 qboolean Scrap_Compatible (unsigned int texflags)
 {
-	unsigned int required = TEXPREF_PAD;
-	unsigned int unsupported = TEXPREF_MIPMAP | TEXPREF_NEAREST | TEXPREF_LINEAR;
+	uint32_t required = TEXPREF_PAD;
+	uint32_t unsupported = TEXPREF_MIPMAP | TEXPREF_NEAREST | TEXPREF_LINEAR;
 	return (texflags & required) == required && (texflags & unsupported) == 0;
 }
 
@@ -518,7 +518,7 @@ Draw_CreateWinQuakeMenuBgTex
 */
 static void Draw_CreateWinQuakeMenuBgTex (void)
 {
-	static unsigned winquakemenubg_pixels[4*2] =
+	static uint32_t winquakemenubg_pixels[4*2] =
 	{
 		0x00ffffffu, 0xff000000u, 0xff000000u, 0xff000000u,
 		0xff000000u, 0xff000000u, 0x00ffffffu, 0xff000000u,
@@ -627,7 +627,7 @@ static void Draw_SetTexture (gltexture_t *tex)
 Draw_SetBlending
 ================
 */
-static void Draw_SetBlending (unsigned blend)
+static void Draw_SetBlending (uint32_t blend)
 {
 	if (blend == glcanvas.blendmode)
 		return;
@@ -700,17 +700,12 @@ static guivertex_t* Draw_AllocQuad (void)
 Draw_SetVertex
 ================
 */
-static void Draw_SetVertex (guivertex_t *v, float x, float y, float s, float t)
+static FUNC_INLINE void Draw_SetVertex (guivertex_t *v, float x, float y, float s, float t)
 {
 	uint32_t color = glcanvas.colorstack[glcanvas.colorstacktop];
-	v->pos[0] = x * glcanvas.transform.scale[0] + glcanvas.transform.offset[0];
-	v->pos[1] = y * glcanvas.transform.scale[1] + glcanvas.transform.offset[1];
-	v->uv[0] = s;
-	v->uv[1] = t;
-	v->color[0] = (color >>  0) & 0xff;
-	v->color[1] = (color >>  8) & 0xff;
-	v->color[2] = (color >> 16) & 0xff;
-	v->color[3] = (color >> 24) & 0xff;
+	vfma(2,v->pos,((vec2f_t){ x, y }),glcanvas.transform.scale,glcanvas.transform.offset);
+	vset(v->uv,s,t);
+	vset(v->color,(color >>  0) & 0xff, (color >>  8) & 0xff, (color >> 16) & 0xff, (color >> 24) & 0xff);
 }
 
 /*
@@ -718,18 +713,19 @@ static void Draw_SetVertex (guivertex_t *v, float x, float y, float s, float t)
 Draw_CharacterQuadEx -- johnfitz -- seperate function to spit out verts
 ================
 */
-void Draw_CharacterQuadEx (float x, float y, float dimx, float dimy, char num)
+void Draw_CharacterQuadEx (vecf_t x, vecf_t y, vecf_t dimx, vecf_t dimy, char num)
 {
-	int				row, col;
-	float			frow, fcol, fsize;
-	guivertex_t		*verts;
+	int32_t       row, col;
+	vecf_t      frow, fcol;
+	vecf_t      fsize;
+	guivertex_t *verts;
 
-	row = num>>4;
-	col = num&15;
+	row = num >> 4;
+	col = num & 15;
 
 	frow = row * 0.0625f + 1.f / (16.f * 10.f);
 	fcol = col * 0.0625f + 1.f / (16.f * 10.f);
-	fsize = 8.f / (16.f * 10.f);
+	fsize =                8.f / (16.f * 10.f);
 
 	verts = Draw_AllocQuad ();
 	Draw_SetVertex (verts++, x,      y,      fcol,         frow);
@@ -1119,28 +1115,23 @@ Draw_SetClipRect
 */
 void Draw_SetClipRect (float x, float y, float width, float height)
 {
-	float x2 = x + width;
-	float y2 = y + height;
+	vec4f_t pos   = {         x,          y,   x + width, y + height };
+	vec4f_t half  = {      0.5f,       0.5f,        0.5f,       0.5f };
+	vec4f_t dim   = {   glwidth,   glheight,     glwidth,   glheight };
+	vec4f_t glpos = {       glx,        gly,         glx,        gly };
 
 	// canvas to -1..1
-	x  = x  * glcanvas.transform.scale[0] + glcanvas.transform.offset[0];
-	x2 = x2 * glcanvas.transform.scale[0] + glcanvas.transform.offset[0];
-	y  = y  * glcanvas.transform.scale[1] + glcanvas.transform.offset[1];
-	y2 = y2 * glcanvas.transform.scale[1] + glcanvas.transform.offset[1];
+	vfma(4,pos,pos,glcanvas.transform.scale,glcanvas.transform.offset);
 	// -1..1 to 0..1
-	x  = CLAMP (0.f, x  * 0.5f + 0.5f, 1.f);
-	x2 = CLAMP (0.f, x2 * 0.5f + 0.5f, 1.f);
-	y  = CLAMP (0.f, y  * 0.5f + 0.5f, 1.f);
-	y2 = CLAMP (0.f, y2 * 0.5f + 0.5f, 1.f);
-	// 0..1 to screen
-	x  = floor (glx + x  * glwidth  + 0.5f);
-	x2 = floor (glx + x2 * glwidth  + 0.5f);
-	y  = floor (gly + y  * glheight + 0.5f);
-	y2 = floor (gly + y2 * glheight + 0.5f);
+	vfma(4,pos,pos,half,half);
+	vclamp(4,pos,0.f,1.f);
+	vfma(4,dim,pos,dim,half);
+	vadd(4,glpos,glpos,dim);
+	vfloor(4,glpos);
 
 	Draw_Flush ();
 	glEnable (GL_SCISSOR_TEST);
-	glScissor (x, y2, x2 - x, y - y2);
+	glScissor (pos[0], pos[2], pos[2] - pos[0], pos[1] - pos[3]);
 }
 
 /*
@@ -1154,12 +1145,12 @@ void Draw_ResetClipping (void)
 	glDisable (GL_SCISSOR_TEST);
 }
 
-#define CANVAS_ALIGN_LEFT		0.f
-#define CANVAS_ALIGN_CENTERX	0.5f
-#define CANVAS_ALIGN_RIGHT		1.f
-#define CANVAS_ALIGN_TOP		0.f
-#define CANVAS_ALIGN_CENTERY	0.5f
-#define CANVAS_ALIGN_BOTTOM		1.f
+#define CANVAS_ALIGN_LEFT    0.f
+#define CANVAS_ALIGN_CENTERX 0.5f
+#define CANVAS_ALIGN_RIGHT   1.f
+#define CANVAS_ALIGN_TOP     0.f
+#define CANVAS_ALIGN_CENTERY 0.5f
+#define CANVAS_ALIGN_BOTTOM  1.f
 
 /*
 ================

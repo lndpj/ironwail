@@ -54,6 +54,42 @@ static inline int IS_NAN (float x) {
 
 #define Q_rint(x) ((x) > 0 ? (int)((x) + 0.5) : (int)((x) - 0.5)) //johnfitz -- from joequake
 
+#define vadd(n,dst,a,b) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (a)[i] + (b)[i]; \
+} while(0)
+
+#define vfma(n,dst,a,b,c) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (a)[i] * (b)[i] + (c)[i]; \
+} while(0)
+
+#define vset(dst,...) \
+do { \
+const size_t n = countargs(__VA_ARGS__); \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (__typeof__(__VA_ARGS__)[]){ __VA_ARGS__ }[i]; \
+} while (0)
+
+#define vfloor(n,dst) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (typeof((dst)[0]))floor((double)((dst)[i])); \
+} while(0)
+
+#define vclamp(n,dst,minval,maxval) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = ((dst)[i] < (minval)) ? (minval) : ((dst)[i] > (maxval)) ? (maxval) : (dst)[i]; \
+} while(0)
+
 #define DotProduct(x,y)					((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2])
 #define DoublePrecisionDotProduct(x,y)	((double)(x)[0]*(y)[0]+(double)(x)[1]*(y)[1]+(double)(x)[2]*(y)[2])
 #define VectorSubtract(a,b,dst)			do {(dst)[0]=(a)[0]-(b)[0];(dst)[1]=(a)[1]-(b)[1];(dst)[2]=(a)[2]-(b)[2];} while (0)

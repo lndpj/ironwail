@@ -240,17 +240,17 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-	int32_t			planenum;
-	int32_t			children[2];	// negative numbers are contents
+	int32_t planenum;
+	int32_t children[2];	// negative numbers are contents
 } dlclipnode_t;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct texinfo_s
 {
-	float		vecs[2][4];		// [s/t][xyz offset]
-	int32_t		miptex;
-	int32_t		flags;
+	float   vecs[2][4];		// [s/t][xyz offset]
+	int32_t miptex;
+	int32_t flags;
 } texinfo_t;
 #pragma pack(pop)
 
@@ -262,14 +262,14 @@ typedef struct texinfo_s
 #pragma pack(push,1)
 typedef struct
 {
-	uint16_t	v[2];		// vertex numbers
+	uint16_t v[2];		// vertex numbers
 } dsedge_t;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct
 {
-	uint32_t	v[2];		// vertex numbers
+	uint32_t v[2];		// vertex numbers
 } dledge_t;
 #pragma pack(pop)
 
@@ -277,32 +277,32 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-	int16_t		planenum;
-	int16_t		side;
+	int16_t planenum;
+	int16_t side;
 
-	int32_t		firstedge;		// we must support > 64k edges
-	int16_t		numedges;
-	int16_t		texinfo;
+	int32_t firstedge;		// we must support > 64k edges
+	int16_t	numedges;
+	int16_t texinfo;
 
 // lighting info
-	byte		styles[MAXLIGHTMAPS];
-	int32_t		lightofs;		// start of [numstyles*surfsize] samples
+	byte    styles[MAXLIGHTMAPS];
+	int32_t lightofs;		// start of [numstyles*surfsize] samples
 } dsface_t;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct
 {
-	int32_t			planenum;
-	int32_t			side;
+	int32_t planenum;
+	int32_t side;
 
-	int32_t			firstedge;		// we must support > 64k edges
-	int32_t			numedges;
-	int32_t			texinfo;
+	int32_t firstedge;		// we must support > 64k edges
+	int32_t numedges;
+	int32_t texinfo;
 
 // lighting info
-	byte		styles[MAXLIGHTMAPS];
-	int32_t			lightofs;		// start of [numstyles*surfsize] samples
+	byte    styles[MAXLIGHTMAPS];
+	int32_t lightofs;		// start of [numstyles*surfsize] samples
 } dlface_t;
 #pragma pack(pop)
 
@@ -318,48 +318,48 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-	int32_t			contents;
-	int32_t			visofs;				// -1 = no visibility info
+	 int32_t contents;
+	 int32_t visofs;				// -1 = no visibility info
 
-	int16_t		mins[3];			// for frustum culling
-	int16_t		maxs[3];
+	 int16_t mins[3];			// for frustum culling
+	 int16_t maxs[3];
 
-	uint16_t		firstmarksurface;
-	uint16_t		nummarksurfaces;
+	uint16_t firstmarksurface;
+	uint16_t nummarksurfaces;
 
-	byte		ambient_level[NUM_AMBIENTS];
+	    byte ambient_level[NUM_AMBIENTS];
 } dsleaf_t;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct
 {
-	int32_t			contents;
-	int32_t			visofs;				// -1 = no visibility info
+	 int32_t contents;
+	 int32_t visofs;				// -1 = no visibility info
 
-	int16_t		mins[3];			// for frustum culling
-	int16_t		maxs[3];
+	 int16_t mins[3];			// for frustum culling
+	 int16_t maxs[3];
 
-	uint32_t		firstmarksurface;
-	uint32_t		nummarksurfaces;
+	uint32_t firstmarksurface;
+	uint32_t nummarksurfaces;
 
-	byte		ambient_level[NUM_AMBIENTS];
+	    byte ambient_level[NUM_AMBIENTS];
 } dl1leaf_t;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct
 {
-	int32_t			contents;
-	int32_t			visofs;				// -1 = no visibility info
+	 int32_t contents;
+	 int32_t visofs;				// -1 = no visibility info
 
-	float		mins[3];			// for frustum culling
-	float		maxs[3];
+	   float mins[3];			// for frustum culling
+	   float maxs[3];
 
-	uint32_t		firstmarksurface;
-	uint32_t		nummarksurfaces;
+	uint32_t firstmarksurface;
+	uint32_t nummarksurfaces;
 
-	byte		ambient_level[NUM_AMBIENTS];
+  	    byte ambient_level[NUM_AMBIENTS];
 } dl2leaf_t;
 #pragma pack(pop)
 
@@ -373,50 +373,50 @@ typedef struct
 
 // the utilities get to be lazy and just use large static arrays
 
-extern	int32_t			nummodels;
-extern	dmodel_t	dmodels[MAX_MAP_MODELS];
+extern	int32_t  nummodels;
+extern	dmodel_t dmodels[MAX_MAP_MODELS];
 
-extern	int32_t			visdatasize;
-extern	byte		dvisdata[MAX_MAP_VISIBILITY];
+extern	int32_t  visdatasize;
+extern	byte     dvisdata[MAX_MAP_VISIBILITY];
 
-extern	int32_t			lightdatasize;
-extern	byte		dlightdata[MAX_MAP_LIGHTING];
+extern	int32_t  lightdatasize;
+extern	byte     dlightdata[MAX_MAP_LIGHTING];
 
-extern	int32_t			texdatasize;
-extern	byte		dtexdata[MAX_MAP_MIPTEX]; // (dmiptexlump_t)
+extern	int32_t  texdatasize;
+extern	byte     dtexdata[MAX_MAP_MIPTEX]; // (dmiptexlump_t)
 
-extern	int32_t			entdatasize;
-extern	char		dentdata[MAX_MAP_ENTSTRING];
+extern	int32_t  entdatasize;
+extern	char     dentdata[MAX_MAP_ENTSTRING];
 
 //extern	int			numleafs;
 //extern	dleaf_t		dleafs[MAX_MAP_LEAFS];
 
-extern	int32_t			numplanes;
-extern	dplane_t	dplanes[MAX_MAP_PLANES];
+extern	int32_t     numplanes;
+extern	dplane_t    dplanes[MAX_MAP_PLANES];
 
-extern	int32_t			numvertexes;
-extern	dvertex_t	dvertexes[MAX_MAP_VERTS];
+extern	int32_t     numvertexes;
+extern	dvertex_t   dvertexes[MAX_MAP_VERTS];
 
-extern	int32_t			numnodes;
-extern	dnode_t		dnodes[MAX_MAP_NODES];
+extern	int32_t     numnodes;
+extern	dnode_t     dnodes[MAX_MAP_NODES];
 
-extern	int32_t			numtexinfo;
-extern	texinfo_t	texinfo[MAX_MAP_TEXINFO];
+extern	int32_t     numtexinfo;
+extern	texinfo_t   texinfo[MAX_MAP_TEXINFO];
 
-extern	int32_t			numfaces;
-extern	dface_t		dfaces[MAX_MAP_FACES];
+extern	int32_t     numfaces;
+extern	dface_t	    dfaces[MAX_MAP_FACES];
 
-extern	int32_t			numclipnodes;
-extern	dclipnode_t	dclipnodes[MAX_MAP_CLIPNODES];
+extern	int32_t     numclipnodes;
+extern	dclipnode_t dclipnodes[MAX_MAP_CLIPNODES];
 
-extern	int32_t			numedges;
-extern	dedge_t		dedges[MAX_MAP_EDGES];
+extern	int32_t	    numedges;
+extern	dedge_t	    dedges[MAX_MAP_EDGES];
 
-extern	int32_t			nummarksurfaces;
-extern	unsigned short	dmarksurfaces[MAX_MAP_MARKSURFACES];
+extern	 int32_t    nummarksurfaces;
+extern	uint16_t    dmarksurfaces[MAX_MAP_MARKSURFACES];
 
-extern	int32_t			numsurfedges;
-extern	int32_t			dsurfedges[MAX_MAP_SURFEDGES];
+extern	int32_t     numsurfedges;
+extern	int32_t     dsurfedges[MAX_MAP_SURFEDGES];
 
 
 void DecompressVis (byte *in, byte *decompressed);
@@ -440,15 +440,15 @@ typedef struct epair_s
 #pragma pack(push,1)
 typedef struct
 {
-	vec3_t		origin;
-	int32_t			firstbrush;
-	int32_t			numbrushes;
-	epair_t		*epairs;
+	vec3_t   origin;
+	int32_t  firstbrush;
+	int32_t  numbrushes;
+	epair_t	*epairs;
 } entity_t;
 #pragma pack(pop)
 
-extern	int32_t			num_entities;
-extern	entity_t	entities[MAX_MAP_ENTITIES];
+extern	int32_t  num_entities;
+extern	entity_t entities[MAX_MAP_ENTITIES];
 
 void	ParseEntities (void);
 void	UnparseEntities (void);

@@ -132,6 +132,8 @@ COMPILE_TIME_ASSERT(enum, sizeof(THE_DUMMY_ENUM) == sizeof(int));
 #define offsetof(t,m) ((intptr_t)&(((t *)0)->m))
 #endif
 
+#define countargs(...) (0 __VA_OPT__(+sizeof((__typeof__(__VA_ARGS__)[]){__VA_ARGS__})/sizeof(__VA_ARGS__)))
+#define emptyargs(...) (true __VA_OPT__(-1))
 
 /*==========================================================================*/
 
@@ -159,10 +161,26 @@ COMPILE_TIME_ASSERT(qboolean, sizeof(qboolean) == 4);
 /*==========================================================================*/
 
 /* math */
-typedef float	vec_t;
+typedef float	vecf_t;
+
+typedef vecf_t   vec2f_t[2];
+typedef vecf_t   vec3f_t[3];
+typedef vecf_t   vec4f_t[4];
+
+typedef double	vecd_t;
+
+typedef vecd_t   vec2d_t[2];
+typedef vecd_t   vec3d_t[3];
+typedef vecd_t   vec4d_t[4];
+
+typedef vecf_t  vec_t;
+
+typedef vec_t   vec2_t[2];
 typedef vec_t	vec3_t[3];
 typedef vec_t	vec4_t[4];
-typedef vec_t	vec5_t[5];
+
+typedef byte    rgba8888_t[4];
+
 typedef int	fixed4_t;
 typedef int	fixed8_t;
 typedef int	fixed16_t;
@@ -237,6 +255,17 @@ typedef ptrdiff_t	ssize_t;
 #define FUNC_NORETURN /* use the 'aborts' aux pragma */
 #else
 #define FUNC_NORETURN
+#endif
+
+#if defined(_MSC_VER)
+#ifndef inline
+#define inline __inline
+#endif
+#define FUNC_INLINE inline [[msvc::force_inline],[msvc::flatten]]
+#elif defined(__GNUC__)
+#define FUNC_INLINE inline __attribute__((always_inline,flatten))
+#else
+#define FUNC_INLINE inline
 #endif
 
 #if defined(__GNUC__) && ((__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
