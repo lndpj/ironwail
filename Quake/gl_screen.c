@@ -1288,10 +1288,10 @@ static void SCR_ClipToFrustum (vec3_t pos, const vec3_t ref)
 	for (i = 0; i < 4; i++)
 	{
 		mplane_t *plane = &frustum[i];
-		float dist = DotProduct (plane->normal, pos) - plane->dist;
+		float dist = vdot3 (plane->normal, pos) - plane->dist;
 		if (dist < 0.f)
 		{
-			float ref_dist = DotProduct (plane->normal, ref) - plane->dist;
+			float ref_dist = vdot3 (plane->normal, ref) - plane->dist;
 			if (ref_dist != dist)
 				VectorLerp (pos, ref, -dist / (ref_dist - dist), pos);
 		}

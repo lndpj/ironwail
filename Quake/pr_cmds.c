@@ -1437,7 +1437,7 @@ static void PF_aim (void)
 			end[j] = check->v.origin[j] + 0.5 * (check->v.mins[j] + check->v.maxs[j]);
 		VectorSubtract (end, start, dir);
 		VectorNormalize (dir);
-		dist = DotProduct (dir, pr_global_struct->v_forward);
+		dist = vdot3 (dir, pr_global_struct->v_forward);
 		if (dist < bestdist)
 			continue;	// to far to turn
 		tr = SV_Move (start, vec3_origin, vec3_origin, end, false, ent);
@@ -1451,7 +1451,7 @@ static void PF_aim (void)
 	if (bestent)
 	{
 		VectorSubtract (bestent->v.origin, ent->v.origin, dir);
-		dist = DotProduct (dir, pr_global_struct->v_forward);
+		dist = vdot3 (dir, pr_global_struct->v_forward);
 		VectorScale (pr_global_struct->v_forward, dist, end);
 		end[2] = dir[2];
 		VectorNormalize (end);
@@ -2413,7 +2413,7 @@ static void PF_vectorvectors(void)
 		pr_global_struct->v_right[2] = 0;
 		VectorNormalize(pr_global_struct->v_right);
 	}
-	CrossProduct(pr_global_struct->v_right, pr_global_struct->v_forward, pr_global_struct->v_up);
+	vcross3(pr_global_struct->v_up, pr_global_struct->v_right, pr_global_struct->v_forward);
 }
 
 //string stuff

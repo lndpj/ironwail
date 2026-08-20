@@ -170,7 +170,7 @@ void SV_Accelerate (float wishspeed, const vec3_t wishdir)
 	int			i;
 	float		addspeed, accelspeed, currentspeed;
 
-	currentspeed = DotProduct (velocity, wishdir);
+	currentspeed = vdot3 (velocity, wishdir);
 	addspeed = wishspeed - currentspeed;
 	if (addspeed <= 0)
 		return;
@@ -190,7 +190,7 @@ void SV_AirAccelerate (float wishspeed, vec3_t wishveloc)
 	wishspd = VectorNormalize (wishveloc);
 	if (wishspd > 30)
 		wishspd = 30;
-	currentspeed = DotProduct (velocity, wishveloc);
+	currentspeed = vdot3 (velocity, wishveloc);
 	addspeed = wishspd - currentspeed;
 	if (addspeed <= 0)
 		return;

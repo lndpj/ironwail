@@ -36,9 +36,9 @@ void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal )
 	vec3_t n;
 	float inv_denom;
 
-	inv_denom = 1.0F / DotProduct( normal, normal );
+	inv_denom = 1.0F / vdot3( normal, normal );
 
-	d = DotProduct( normal, p ) * inv_denom;
+	d = vdot3( normal, p ) * inv_denom;
 
 	n[0] = normal[0] * inv_denom;
 	n[1] = normal[1] * inv_denom;
@@ -199,8 +199,8 @@ int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, mplane_t *p)
 			corners[0][i] = emaxs[i];
 		}
 	}
-	dist = DotProduct (plane->normal, corners[0]) - plane->dist;
-	dist2 = DotProduct (plane->normal, corners[1]) - plane->dist;
+	dist = vdot3 (plane->normal, corners[0]) - plane->dist;
+	dist2 = vdot3 (plane->normal, corners[1]) - plane->dist;
 	sides = 0;
 	if (dist1 >= 0)
 		sides = 1;
@@ -287,50 +287,16 @@ void VectorLerp (const vec3_t veca, const vec3_t vecb, float frac, vec3_t dst)
 	dst[2] = LERP (veca[2], vecb[2], frac);
 }
 
-
-vec_t _DotProduct (const vec3_t v1, const vec3_t v2)
-{
-	return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
-}
-
-void _VectorSubtract (const vec3_t veca, const vec3_t vecb, vec3_t out)
-{
-	out[0] = veca[0]-vecb[0];
-	out[1] = veca[1]-vecb[1];
-	out[2] = veca[2]-vecb[2];
-}
-
-void _VectorAdd (const vec3_t veca, const vec3_t vecb, vec3_t out)
-{
-	out[0] = veca[0]+vecb[0];
-	out[1] = veca[1]+vecb[1];
-	out[2] = veca[2]+vecb[2];
-}
-
-void _VectorCopy (const vec3_t in, vec3_t out)
-{
-	out[0] = in[0];
-	out[1] = in[1];
-	out[2] = in[2];
-}
-
-void CrossProduct (const vec3_t v1, const vec3_t v2, vec3_t cross)
-{
-	cross[0] = v1[1]*v2[2] - v1[2]*v2[1];
-	cross[1] = v1[2]*v2[0] - v1[0]*v2[2];
-	cross[2] = v1[0]*v2[1] - v1[1]*v2[0];
-}
-
 vec_t VectorLength(const vec3_t v)
 {
-	return sqrt(DotProduct(v,v));
+	return sqrt(vdot3(v,v));
 }
 
 float VectorNormalize (vec3_t v)
 {
 	float	length, ilength;
 
-	length = sqrt(DotProduct(v,v));
+	length = sqrt(vdot3(v,v));
 
 	if (length)
 	{

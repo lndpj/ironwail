@@ -239,7 +239,7 @@ void R_SetupAliasLighting (entity_t	*e)
 	{
 		gpulight_t *l = &r_lightbuffer.lights[i];
 		VectorSubtract (e->origin, l->pos, dist);
-		add = DotProduct (dist, dist);
+		add = vdot3 (dist, dist);
 		if (l->radius * l->radius > add)
 			VectorMA (lightcolor, l->radius - sqrtf (add), l->color, lightcolor);
 	}

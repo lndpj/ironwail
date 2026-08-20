@@ -95,8 +95,8 @@ mspriteframe_t *R_GetSpriteFrame (entity_t *currentent)
 		vec3_t axis[3];
 		AngleVectors(currentent->angles, axis[0], axis[1], axis[2]);
 		{
-			float f = DotProduct(vpn, axis[0]);
-			float r = DotProduct(vright, axis[0]);
+			float f = vdot3(vpn, axis[0]);
+			float r = vdot3(vright, axis[0]);
 			int dir = (atan2(r, f)+1.125*M_PI)*(4/M_PI);
 			pspritegroup = (mspritegroup_t *)psprite->frames[frame].frameptr;
 			pspriteframe = pspritegroup->frames[dir&7];
@@ -204,7 +204,7 @@ static void R_DrawSpriteModel_Real (entity_t *e, qboolean showtris)
 		v_up[0] = 0;
 		v_up[1] = 0;
 		v_up[2] = 1;
-		CrossProduct(vpn, v_up, v_right);
+		vcross3(v_right,vpn, v_up);
 		VectorNormalizeFast(v_right);
 		s_up = v_up;
 		s_right = v_right;

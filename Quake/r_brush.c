@@ -670,10 +670,10 @@ void GL_BuildBModelVertexBuffer (void)
 					vec = m->vertexes[r_pedge->v[1]].position;
 				}
 
-				s = DotProduct (vec, fa->texinfo->vecs[0]) + fa->texinfo->vecs[0][3] * useofs;
+				s = vdot3 (vec, fa->texinfo->vecs[0]) + fa->texinfo->vecs[0][3] * useofs;
 				s *= texscalex;
 
-				t = DotProduct (vec, fa->texinfo->vecs[1]) + fa->texinfo->vecs[1][3] * useofs;
+				t = vdot3 (vec, fa->texinfo->vecs[1]) + fa->texinfo->vecs[1][3] * useofs;
 				t *= texscaley;
 
 				VectorCopy (vec, vert->pos);
@@ -694,13 +694,13 @@ void GL_BuildBModelVertexBuffer (void)
 					//
 					// lightmap texture coordinates
 					//
-					s = DotProduct (vec, fa->texinfo->vecs[0]) + fa->texinfo->vecs[0][3];
+					s = vdot3 (vec, fa->texinfo->vecs[0]) + fa->texinfo->vecs[0][3];
 					s -= fa->texturemins[0];
 					s += (fa->light_s + lm->xofs) * 16;
 					s += 8;
 					s *= lmscalex;
 
-					t = DotProduct (vec, fa->texinfo->vecs[1]) + fa->texinfo->vecs[1][3];
+					t = vdot3 (vec, fa->texinfo->vecs[1]) + fa->texinfo->vecs[1][3];
 					t -= fa->texturemins[1];
 					t += (fa->light_t + lm->yofs) * 16;
 					t += 8;

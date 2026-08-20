@@ -90,21 +90,30 @@ for(size_t i = 0; i < n; i++) \
 	(dst)[i] = ((dst)[i] < (minval)) ? (minval) : ((dst)[i] > (maxval)) ? (maxval) : (dst)[i]; \
 } while(0)
 
-#define DotProduct(x,y)					((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2])
+#define vcross3(dst,a,b) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < 3; i++) \
+	(dst)[i] = (a)[(1+i) % 3] * (b)[(2+i) % 3] - (a)[(2+i) % 3] * (b)[(1+i) % 3]; \
+} while(0)
+
+#define vdot2(x,y)      ((x)[0]*(y)[0]+(x)[1]*(y)[1])
+#define vdot3(x,y)	((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2])
+#define vdot4(x,y)	((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2]+(x)[3]*(y)[3])
 #define DoublePrecisionDotProduct(x,y)	((double)(x)[0]*(y)[0]+(double)(x)[1]*(y)[1]+(double)(x)[2]*(y)[2])
+
 #define VectorSubtract(a,b,dst)			do {(dst)[0]=(a)[0]-(b)[0];(dst)[1]=(a)[1]-(b)[1];(dst)[2]=(a)[2]-(b)[2];} while (0)
 #define VectorAdd(a,b,dst)				do {(dst)[0]=(a)[0]+(b)[0];(dst)[1]=(a)[1]+(b)[1];(dst)[2]=(a)[2]+(b)[2];} while (0)
 #define VectorCopy(src,dst)				do {(dst)[0]=(src)[0];(dst)[1]=(src)[1];(dst)[2]=(src)[2];} while (0)
 #define VectorSet(v,x,y,z)				do {(v)[0]=(x);(v)[1]=(y);(v)[2]=(z);} while (0)
-#define VectorLengthSquared(v)			DotProduct(v,v)
-
+#define VectorLengthSquared(v)			vdot3(v,v)
 //johnfitz -- courtesy of lordhavoc
 // QuakeSpasm: To avoid strict aliasing violations, use a float/int union instead of type punning.
 #define VectorNormalizeFast(_v)\
 do\
 {\
 	union { float f; int i; } _y, _number;\
-	_number.f = DotProduct((_v), (_v));\
+	_number.f = vdot3((_v), (_v));\
 	if (_number.f != 0.0)\
 	{\
 		_y.i = 0x5f3759df - (_number.i >> 1);\
@@ -118,14 +127,8 @@ void VectorAngles (const vec3_t forward, vec3_t angles); //johnfitz
 void VectorMA (const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc);
 void VectorLerp (const vec3_t veca, const vec3_t vecb, float frac, vec3_t dst);
 
-vec_t _DotProduct (const vec3_t v1, const vec3_t v2);
-void _VectorSubtract (const vec3_t veca, const vec3_t vecb, vec3_t out);
-void _VectorAdd (const vec3_t veca, const vec3_t vecb, vec3_t out);
-void _VectorCopy (const vec3_t in, vec3_t out);
-
 int VectorCompare (const vec3_t v1, const vec3_t v2);
 vec_t VectorLength (const vec3_t v);
-void CrossProduct (const vec3_t v1, const vec3_t v2, vec3_t cross);
 float VectorNormalize (vec3_t v);		// returns vector length
 float DistanceSquared (const vec3_t a, const vec3_t b);
 float Distance (const vec3_t a, const vec3_t b);

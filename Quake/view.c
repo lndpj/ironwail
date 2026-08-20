@@ -85,7 +85,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity)
 	float	value;
 
 	AngleVectors (angles, forward, right, up);
-	side = DotProduct (velocity, right);
+	side = vdot3 (velocity, right);
 	sign = side < 0 ? -1 : 1;
 	side = fabs(side);
 
@@ -336,10 +336,10 @@ void V_ParseDamage (void)
 
 	AngleVectors (ent->angles, forward, right, up);
 
-	side = DotProduct (from, right);
+	side = vdot3 (from, right);
 	v_dmg_roll = count*side*v_kickroll.value;
 
-	side = DotProduct (from, forward);
+	side = vdot3 (from, forward);
 	v_dmg_pitch = count*side*v_kickpitch.value;
 
 	v_dmg_time = v_kicktime.value;

@@ -201,7 +201,7 @@ int ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 	if (!normal[2])
 		blocked |= 2;		// step
 
-	backoff = DotProduct (in, normal) * overbounce;
+	backoff = vdot3 (in, normal) * overbounce;
 
 	for (i=0 ; i<3 ; i++)
 	{
@@ -325,7 +325,7 @@ int SV_FlyMove (edict_t *ent, float time, trace_t *steptrace)
 			for (j=0 ; j<numplanes ; j++)
 				if (j != i)
 				{
-					if (DotProduct (new_velocity, planes[j]) < 0)
+					if (vdot3 (new_velocity, planes[j]) < 0)
 						break;	// not ok
 				}
 			if (j == numplanes)
@@ -344,8 +344,8 @@ int SV_FlyMove (edict_t *ent, float time, trace_t *steptrace)
 				VectorCopy (vec3_origin, ent->v.velocity);
 				return 7;
 			}
-			CrossProduct (planes[0], planes[1], dir);
-			d = DotProduct (dir, ent->v.velocity);
+			vcross3 (dir,planes[0], planes[1]);
+			d = vdot3 (dir, ent->v.velocity);
 			VectorScale (dir, d, ent->v.velocity);
 		}
 
@@ -353,7 +353,7 @@ int SV_FlyMove (edict_t *ent, float time, trace_t *steptrace)
 // if original velocity is against the original velocity, stop dead
 // to avoid tiny occilations in sloping corners
 //
-		if (DotProduct (ent->v.velocity, primal_velocity) <= 0)
+		if (vdot3 (ent->v.velocity, primal_velocity) <= 0)
 		{
 			VectorCopy (vec3_origin, ent->v.velocity);
 			return blocked;
@@ -758,14 +758,14 @@ void SV_WallFriction (edict_t *ent, trace_t *trace)
 	vec3_t		into, side;
 
 	AngleVectors (ent->v.v_angle, forward, right, up);
-	d = DotProduct (trace->plane.normal, forward);
+	d = vdot3 (trace->plane.normal, forward);
 
 	d += 0.5;
 	if (d >= 0)
 		return;
 
 // cut the tangential velocity
-	i = DotProduct (trace->plane.normal, ent->v.velocity);
+	i = vdot3 (trace->plane.normal, ent->v.velocity);
 	VectorScale (trace->plane.normal, i, into);
 	VectorSubtract (ent->v.velocity, into, side);
 

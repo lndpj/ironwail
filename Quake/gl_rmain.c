@@ -811,7 +811,7 @@ void ExtractFrustumPlane (float mvp[16], int axis, float ndcval, qboolean flip, 
 	out->normal[2] =  (mvp[2*4 + axis] - ndcval * mvp[2*4 + 3]);
 	out->dist      = -(mvp[3*4 + axis] - ndcval * mvp[3*4 + 3]);
 
-	scale = (flip ? -1.f : 1.f) / sqrtf (DotProduct (out->normal, out->normal));
+	scale = (flip ? -1.f : 1.f) / sqrtf (vdot3 (out->normal, out->normal));
 	out->normal[0] *= scale;
 	out->normal[1] *= scale;
 	out->normal[2] *= scale;
@@ -1333,7 +1333,7 @@ void R_EmitArrow (const vec3_t from, const vec3_t to, uint32_t color)
 	else
 	{
 		VectorSubtract (from, r_origin, tmp);
-		CrossProduct (dir, tmp, side);
+		vcross3 (side,dir, tmp);
 		VectorNormalize (side);
 	}
 

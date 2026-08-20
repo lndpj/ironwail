@@ -160,7 +160,7 @@ void R_PushDlights (void)
 			for (j = 0; j < 4; j++)
 			{
 				mplane_t *p = &frustum[j];
-				if (DotProduct (p->normal, l->origin) - p->dist + l->radius < 0.f)
+				if (vdot3 (p->normal, l->origin) - p->dist + l->radius < 0.f)
 				{
 					cull = true;
 					break;
@@ -258,8 +258,8 @@ loc0:
 	}
 	else
 	{
-		front = DotProduct(start, node->plane->normal) - node->plane->dist;
-		back = DotProduct(end, node->plane->normal) - node->plane->dist;
+		front = vdot3(start, node->plane->normal) - node->plane->dist;
+		back = vdot3(end, node->plane->normal) - node->plane->dist;
 	}
 
 	// LordHavoc: optimized recursion
@@ -316,8 +316,8 @@ loc0:
 			}
 			else
 			{
-				sfront = DotProduct(rayorg, surf->plane->normal) - surf->plane->dist;
-				sback = DotProduct(end, surf->plane->normal) - surf->plane->dist;
+				sfront = vdot3(rayorg, surf->plane->normal) - surf->plane->dist;
+				sback = vdot3(end, surf->plane->normal) - surf->plane->dist;
 			}
 			VectorSubtract(end, rayorg, raydelta);
 			dist = sfront / (sfront - sback) * VectorLength(raydelta);

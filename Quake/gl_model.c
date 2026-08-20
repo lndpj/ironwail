@@ -155,7 +155,7 @@ mleaf_t *Mod_PointInLeaf (vec3_t p, qmodel_t *model)
 		if (node->contents < 0)
 			return (mleaf_t *)node;
 		plane = node->plane;
-		d = DotProduct (p,plane->normal) - plane->dist;
+		d = vdot3 (p,plane->normal) - plane->dist;
 		if (d > 0)
 			node = node->children[0];
 		else
@@ -3991,7 +3991,7 @@ static void MD5_ComputeNormals(iqmvert_t *vert, size_t numverts, unsigned short 
 
 		VectorSubtract(v1->xyz, v0->xyz, d1);
 		VectorSubtract(v2->xyz, v0->xyz, d2);
-		CrossProduct(d2, d1, norm);
+		vcross3(norm, d2, d1);
 
 		VectorAdd(normals[i0], norm, normals[i0]);
 		VectorAdd(normals[i1], norm, normals[i1]);
@@ -4172,7 +4172,7 @@ static qboolean MD5Anim_Load(md5animctx_t *ctx, boneinfo_t *bones, size_t numbon
 			if (ab[j].flags & 16)	quat[1] = *r++;
 			if (ab[j].flags & 32)	quat[2] = *r++;
 
-			quat[3] = 1 - DotProduct(quat,quat);
+			quat[3] = 1 - vdot3(quat,quat);
 			if (quat[3] < 0)
 				quat[3] = 0;//we have no imagination.
 			quat[3] = -sqrt(quat[3]);
@@ -4345,7 +4345,7 @@ static qboolean Mod_LoadMD5MeshModel (qmodel_t *mod, const char *buffer)
 		quat[0] = MD5FLOAT();
 		quat[1] = MD5FLOAT();
 		quat[2] = MD5FLOAT();
-		quat[3] = 1 - DotProduct(quat,quat);
+		quat[3] = 1 - vdot3(quat,quat);
 		if (quat[3] < 0)
 			quat[3] = 0;//we have no imagination.
 		quat[3] = -sqrt(quat[3]);
