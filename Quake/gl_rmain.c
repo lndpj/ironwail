@@ -1323,7 +1323,7 @@ void R_EmitArrow (const vec3_t from, const vec3_t to, uint32_t color)
 
 	R_EmitLine (from, to, color);
 
-	VectorSubtract (to, from, dir);
+	vsub(3,dir,to,from);
 	len = VectorNormalize (dir);
 	if (len < 1e-2f)
 	{
@@ -1332,7 +1332,7 @@ void R_EmitArrow (const vec3_t from, const vec3_t to, uint32_t color)
 	}
 	else
 	{
-		VectorSubtract (from, r_origin, tmp);
+		vsub(3,tmp,from, r_origin);
 		vcross3 (side,dir, tmp);
 		VectorNormalize (side);
 	}

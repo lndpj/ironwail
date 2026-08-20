@@ -190,13 +190,13 @@ void R_SetupEntityTransform (entity_t *e, lerpdata_t *lerpdata)
 			blend = CLAMP (0.0f, (float)(cl.time - e->movelerpstart) / 0.1f * s, 1.0f);
 
 		//translation
-		VectorSubtract (e->currentorigin, e->previousorigin, d);
+		vsub(3,d,e->currentorigin, e->previousorigin);
 		lerpdata->origin[0] = e->previousorigin[0] + d[0] * blend;
 		lerpdata->origin[1] = e->previousorigin[1] + d[1] * blend;
 		lerpdata->origin[2] = e->previousorigin[2] + d[2] * blend;
 
 		//rotation
-		VectorSubtract (e->currentangles, e->previousangles, d);
+		vsub(3,d,e->currentangles,e->previousangles);
 		for (i = 0; i < 3; i++)
 		{
 			if (d[i] > 180)  d[i] -= 360;
@@ -238,7 +238,7 @@ void R_SetupAliasLighting (entity_t	*e)
 	for (i=0; i<r_framedata.numlights; i++)
 	{
 		gpulight_t *l = &r_lightbuffer.lights[i];
-		VectorSubtract (e->origin, l->pos, dist);
+		vsub(3,dist,e->origin, l->pos);
 		add = vdot3 (dist, dist);
 		if (l->radius * l->radius > add)
 			VectorMA (lightcolor, l->radius - sqrtf (add), l->color, lightcolor);

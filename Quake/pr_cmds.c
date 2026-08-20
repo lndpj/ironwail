@@ -268,7 +268,7 @@ static void SetMinMaxSize (edict_t *e, float *minvec, float *maxvec, qboolean ro
 // set derived values
 	VectorCopy (rmin, e->v.mins);
 	VectorCopy (rmax, e->v.maxs);
-	VectorSubtract (maxvec, minvec, e->v.size);
+	vsub (3,e->v.size,maxvec, minvec);
 
 	SV_LinkEdict (e, false);
 }
@@ -1435,7 +1435,7 @@ static void PF_aim (void)
 			continue;	// don't aim at teammate
 		for (j = 0; j < 3; j++)
 			end[j] = check->v.origin[j] + 0.5 * (check->v.mins[j] + check->v.maxs[j]);
-		VectorSubtract (end, start, dir);
+		vsub (3,dir,end,start);
 		VectorNormalize (dir);
 		dist = vdot3 (dir, pr_global_struct->v_forward);
 		if (dist < bestdist)
@@ -1450,7 +1450,7 @@ static void PF_aim (void)
 
 	if (bestent)
 	{
-		VectorSubtract (bestent->v.origin, ent->v.origin, dir);
+		vsub (3,dir,bestent->v.origin, ent->v.origin);
 		dist = vdot3 (dir, pr_global_struct->v_forward);
 		VectorScale (pr_global_struct->v_forward, dist, end);
 		end[2] = dir[2];

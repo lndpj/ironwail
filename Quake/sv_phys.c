@@ -767,7 +767,7 @@ void SV_WallFriction (edict_t *ent, trace_t *trace)
 // cut the tangential velocity
 	i = vdot3 (trace->plane.normal, ent->v.velocity);
 	VectorScale (trace->plane.normal, i, into);
-	VectorSubtract (ent->v.velocity, into, side);
+	vsub(3,side,ent->v.velocity, into);
 
 	ent->v.velocity[0] = side[0] * (1 + d);
 	ent->v.velocity[1] = side[1] * (1 + d);

@@ -318,7 +318,7 @@ void CL_UpdateTEnts (void)
 		}
 
 	// calculate pitch and yaw
-		VectorSubtract (b->end, b->start, dist);
+		vsub(3,dist,b->end, b->start);
 
 		if (dist[1] == 0 && dist[0] == 0)
 		{

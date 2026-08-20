@@ -403,7 +403,7 @@ void SND_Spatialize (channel_t *ch)
 	}
 
 // calculate stereo seperation and distance attenuation
-	VectorSubtract(ch->origin, listener_origin, source_vec);
+	vsub(3,source_vec, ch->origin, listener_origin);
 	dist = VectorNormalize(source_vec) * ch->dist_mult;
 	dot = vdot3(listener_right, source_vec);
 

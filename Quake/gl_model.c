@@ -3989,8 +3989,8 @@ static void MD5_ComputeNormals(iqmvert_t *vert, size_t numverts, unsigned short 
 		iqmvert_t *v1 = &vert[i1];
 		iqmvert_t *v2 = &vert[i2];
 
-		VectorSubtract(v1->xyz, v0->xyz, d1);
-		VectorSubtract(v2->xyz, v0->xyz, d2);
+		vsub(3,d1,v1->xyz, v0->xyz);
+		vsub(3,d2,v2->xyz, v0->xyz);
 		vcross3(norm, d2, d1);
 
 		VectorAdd(normals[i0], norm, normals[i0]);

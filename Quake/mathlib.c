@@ -312,7 +312,7 @@ float VectorNormalize (vec3_t v)
 float DistanceSquared (const vec3_t a, const vec3_t b)
 {
 	vec3_t ab;
-	VectorSubtract (b, a, ab);
+	vsub(3,ab,b,a);
 	return VectorLengthSquared (ab);
 }
 
