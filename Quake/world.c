@@ -158,8 +158,8 @@ hull_t *SV_HullForEntity (edict_t *ent, vec3_t mins, vec3_t maxs, vec3_t offset)
 			hull = &model->hulls[2];
 
 // calculate an offset value to center the origin
-		vsub(3,offset,hull->clip_mins, mins);
-		VectorAdd (offset, ent->v.origin, offset);
+		vsub(3, offset, hull->clip_mins, mins);
+		vadd (3, offset, offset, ent->v.origin);
 	}
 	else
 	{	// create a temp hull from bounding box sizes
@@ -478,8 +478,8 @@ void SV_LinkEdict (edict_t *ent, qboolean touch_triggers)
 		return;
 
 // set the abs box
-	VectorAdd (ent->v.origin, ent->v.mins, ent->v.absmin);
-	VectorAdd (ent->v.origin, ent->v.maxs, ent->v.absmax);
+	vadd (3, ent->v.absmin, ent->v.origin, ent->v.mins);
+	vadd (3, ent->v.absmax, ent->v.origin, ent->v.maxs);
 
 //
 // to make items easier to pick up and allow them to be grabbed off
@@ -803,7 +803,7 @@ trace_t SV_ClipMoveToEntity (edict_t *ent, vec3_t start, vec3_t mins, vec3_t max
 
 // fix trace up by the offset
 	if (trace.fraction != 1)
-		VectorAdd (trace.endpos, offset, trace.endpos);
+		vadd (3, trace.endpos, trace.endpos, offset);
 
 // did we clip the move?
 	if (trace.fraction < 1 || trace.startsolid  )

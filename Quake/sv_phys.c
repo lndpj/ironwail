@@ -405,7 +405,7 @@ trace_t SV_PushEntity (edict_t *ent, vec3_t push)
 	trace_t	trace;
 	vec3_t	end;
 
-	VectorAdd (ent->v.origin, push, end);
+	vadd (3, end, ent->v.origin, push);
 
 	if (ent->v.movetype == MOVETYPE_FLYMISSILE)
 		trace = SV_Move (ent->v.origin, ent->v.mins, ent->v.maxs, end, MOVE_MISSILE, ent);
@@ -460,7 +460,7 @@ void SV_PushMove (edict_t *pusher, float movetime)
 
 // move the pusher to it's final position
 
-	VectorAdd (pusher->v.origin, move, pusher->v.origin);
+	vadd (3, pusher->v.origin, pusher->v.origin, move);
 	pusher->v.ltime += movetime;
 	SV_LinkEdict (pusher, false);
 
@@ -562,9 +562,9 @@ void SV_PushMove (edict_t *pusher, float movetime)
 					{
 						vec3_t check_center, pusher_center;
 
-						VectorAdd (check->v.absmin, check->v.absmax, check_center);
+						vadd (3, check_center, check->v.absmin, check->v.absmax);
 						VectorScale (check_center, 0.5f, check_center);
-						VectorAdd (pusher->v.absmin, pusher->v.absmax, pusher_center);
+						vadd (3, pusher_center, pusher->v.absmin, pusher->v.absmax);
 						VectorScale (pusher_center, 0.5f, pusher_center);
 
 						Con_Warning ("sv_gameplayfix_elevators nudged %s #%d at (%.0f %.0f %.0f) above %s #%d at (%.0f %.0f %.0f)\n",

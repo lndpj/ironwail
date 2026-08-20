@@ -668,7 +668,7 @@ qboolean SV_VisibleToClient (edict_t *client, edict_t *test, qmodel_t *worldmode
 	byte	*pvs;
 	vec3_t	org;
 
-	VectorAdd (client->v.origin, client->v.view_ofs, org);
+	vadd (3, org, client->v.origin, client->v.view_ofs);
 	pvs = SV_FatPVS (org, worldmodel);
 
 	return SV_EdictInPVS (test, pvs);
@@ -700,7 +700,7 @@ void SV_WriteEntitiesToClient (edict_t	*clent, sizebuf_t *msg)
 	edict_t	*ent;
 
 // find the client's PVS
-	VectorAdd (clent->v.origin, clent->v.view_ofs, org);
+	vadd (3, org, clent->v.origin, clent->v.view_ofs);
 	pvs = SV_FatPVS (org, sv.worldmodel);
 
 // find the client's orientation

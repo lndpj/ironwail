@@ -416,8 +416,8 @@ void R_GetEntityBounds (const entity_t *e, vec3_t mins, vec3_t maxs)
 	}
 	else
 	{
-		VectorAdd (e->origin, minbounds, mins);
-		VectorAdd (e->origin, maxbounds, maxs);
+		vadd (3, mins, e->origin, minbounds);
+		vadd (3, maxs,  e->origin, maxbounds);
 	}
 }
 
@@ -1507,7 +1507,7 @@ static void R_ShowBoundingBoxes (void)
 	if (mode >= 2 || mode == 0)
 	{
 		vec3_t org;
-		VectorAdd (sv_player->v.origin, sv_player->v.view_ofs, org);
+		vadd (3, org, sv_player->v.origin, sv_player->v.view_ofs);
 		pvs = SV_FatPVS (org, sv.worldmodel);
 	}
 	else
@@ -1674,8 +1674,8 @@ static void R_ShowBoundingBoxes (void)
 		else
 		{
 			//box entity
-			VectorAdd (ed->v.mins, ed->v.origin, mins);
-			VectorAdd (ed->v.maxs, ed->v.origin, maxs);
+			vadd (3, mins, ed->v.mins, ed->v.origin);
+			vadd (3, maxs, ed->v.maxs, ed->v.origin);
 			R_EmitWireBox (mins, maxs, color);
 		}
 	}

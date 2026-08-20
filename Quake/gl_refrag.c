@@ -135,8 +135,8 @@ void R_AddEfrags (entity_t *ent)
 	}
 	else
 	{
-		VectorAdd (ent->origin, entmodel->mins, r_emins);
-		VectorAdd (ent->origin, entmodel->maxs, r_emaxs);
+		vadd (3, r_emins, ent->origin, entmodel->mins);
+		vadd (3, r_emaxs, ent->origin, entmodel->maxs);
 	}
 
 	i = VEC_SIZE (cl_efrags);

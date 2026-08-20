@@ -403,7 +403,7 @@ void SV_ClientThink (void)
 	cmd = host_client->cmd;
 	angles = sv_player->v.angles;
 
-	VectorAdd (sv_player->v.v_angle, sv_player->v.punchangle, v_angle);
+	vadd (3, v_angle, sv_player->v.v_angle, sv_player->v.punchangle);
 	angles[ROLL] = V_CalcRoll (sv_player->v.angles, sv_player->v.velocity)*4;
 	if (!sv_player->v.fixangle)
 	{

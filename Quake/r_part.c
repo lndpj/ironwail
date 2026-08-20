@@ -554,7 +554,7 @@ void R_RocketTrail (vec3_t start, vec3_t end, int type)
 				break;
 		}
 
-		VectorAdd (start, vec, start);
+		vadd (3, start, start, vec);
 	}
 }
 

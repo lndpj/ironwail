@@ -853,7 +853,7 @@ void V_CalcRefdef (void)
 
 //johnfitz -- v_gunkick
 	if (v_gunkick.value == 1) //original quake kick
-		VectorAdd (r_refdef.viewangles, cl.punchangle, r_refdef.viewangles);
+		vadd (3, r_refdef.viewangles, r_refdef.viewangles, cl.punchangle);
 	if (v_gunkick.value == 2) //lerped kick
 	{
 		float punchblend = (cl.time - cl.punchtime) / 0.1f;

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 include(${CMAKE_CURRENT_SOURCE_DIR}/Misc/cmake/ExtractVersion.cmake)
-project(ironwail VERSION ${IRONWAIL_VERSION} LANGUAGES C)
+project(quake-simd VERSION ${IRONWAIL_VERSION} LANGUAGES C)
 
 if (WIN32)
 	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Windows/cmake-modules)
@@ -167,124 +167,124 @@ if (WIN32)
 	find_package(BundledCODECS)
 endif()
 
-file(GLOB IWAIL_SRC CONFIGURE_DEPENDS "Quake/*.c" "Quake/*.h")
+file(GLOB QUAKE_SIMD_SRC CONFIGURE_DEPENDS "Quake/*.c" "Quake/*.h")
 
-list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/lodepng.h)
-list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/lodepng.c)
+list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/lodepng.h)
+list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/lodepng.c)
 
 if (UNIX)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/pl_win.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wipx.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wipx.h)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wins.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wins.h)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_win.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_win.h)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/sys_sdl_win.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/pl_win.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wipx.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wipx.h)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wins.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_wins.h)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_win.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_win.h)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/sys_sdl_win.c)
 elseif (WIN32)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/pl_linux.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_bsd.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_bsd.h)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_udp.c)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_udp.h)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/sys_sdl_unix.c)
-    list(APPEND IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Windows/QuakeSpasm.rc)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/pl_linux.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_bsd.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_bsd.h)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_udp.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/net_udp.h)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/sys_sdl_unix.c)
+    list(APPEND QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Windows/QuakeSpasm.rc)
 endif()
 
 if (PC_MPG123_FOUND)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/snd_mp3.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/snd_mp3.c)
 elseif (PC_MAD_FOUND)
-    list(REMOVE_ITEM IWAIL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/snd_mpg123.c)
+    list(REMOVE_ITEM QUAKE_SIMD_SRC ${CMAKE_CURRENT_SOURCE_DIR}/Quake/snd_mpg123.c)
 endif()
 
-add_executable(ironwail ${IWAIL_SRC})
-target_link_libraries(ironwail PRIVATE SDL2::SDL2 SDL2::SDL2main)
+add_executable(quake-simd ${QUAKE_SIMD_SRC})
+target_link_libraries(quake-simd PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 if (CURL_FOUND)
-	target_link_libraries(ironwail PRIVATE CURL::libcurl)
+	target_link_libraries(quake-simd PRIVATE CURL::libcurl)
 else()
-	target_compile_definitions(ironwail PRIVATE WITHOUT_CURL)
+	target_compile_definitions(quake-simd PRIVATE WITHOUT_CURL)
 endif()
 
 if (OpenGL::OpenGL)
-	target_link_libraries(ironwail PRIVATE OpenGL::OpenGL)
+	target_link_libraries(quake-simd PRIVATE OpenGL::OpenGL)
 else()
-	target_link_libraries(ironwail PRIVATE OpenGL::GL)
+	target_link_libraries(quake-simd PRIVATE OpenGL::GL)
 endif()
 
 if (PC_MPG123_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_MP3)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_MPG123)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_MP3)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_MPG123)
 elseif (PC_MAD_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_MP3)
-	target_link_libraries(ironwail PUBLIC PkgConfig::PC_MAD)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_MP3)
+	target_link_libraries(quake-simd PUBLIC PkgConfig::PC_MAD)
 endif()
 
 if (PC_OPUSFILE_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_OPUS)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_OPUSFILE)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_OPUS)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_OPUSFILE)
 endif()
 
 if (PC_FLAC_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_FLAC)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_FLAC)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_FLAC)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_FLAC)
 endif()
 
 if (PC_VORBISFILE_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_VORBIS)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_VORBISFILE)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_VORBIS)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_VORBISFILE)
 elseif (PC_TREMOR_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_VORBIS VORBIS_USE_TREMOR)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_TREMOR)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_VORBIS VORBIS_USE_TREMOR)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_TREMOR)
 endif()
 
 if (PC_MIKMOD_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_MIKMOD)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_MIKMOD)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_MIKMOD)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_MIKMOD)
 endif()
 
 if (PC_MODPLUG_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_MODPLUG)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_MODPLUG)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_MODPLUG)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_MODPLUG)
 endif()
 
 if (PC_XMP_FOUND)
-	target_compile_definitions(ironwail PRIVATE USE_CODEC_XMP)
-    target_link_libraries(ironwail PUBLIC PkgConfig::PC_XMP)
+	target_compile_definitions(quake-simd PRIVATE USE_CODEC_XMP)
+    target_link_libraries(quake-simd PUBLIC PkgConfig::PC_XMP)
 endif()
 
 if (PC_MIKMOD_FOUND OR PC_MODPLUG_FOUND OR PC_XMP_FOUND)
-    target_compile_definitions(ironwail PRIVATE USE_CODEC_UMX)
+    target_compile_definitions(quake-simd PRIVATE USE_CODEC_UMX)
 endif()
 
 if (WIN32)
 	#Copy DLL dependencies to output folder
-	add_custom_command(TARGET ironwail POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ironwail> $<TARGET_FILE_DIR:ironwail>
+	add_custom_command(TARGET quake-simd POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:quake-simd> $<TARGET_FILE_DIR:quake-simd>
 		COMMAND_EXPAND_LISTS)
 
 	#VORBISFILE and OPUSFILE both use the libogg-0.dll
 	if (OGG_DLL AND (PC_VORBISFILE_FOUND OR PC_OPUSFILE_FOUND))
-		add_custom_command(TARGET ironwail POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OGG_DLL} $<TARGET_FILE_DIR:ironwail>
+		add_custom_command(TARGET quake-simd POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OGG_DLL} $<TARGET_FILE_DIR:quake-simd>
 			COMMAND_EXPAND_LISTS)
 	endif()
 	#libvorbisfile depends on libvorbis-0.dll
 	if (PC_VORBISFILE_FOUND AND VORBIS_DLL)
-		add_custom_command(TARGET ironwail POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${VORBIS_DLL} $<TARGET_FILE_DIR:ironwail>
+		add_custom_command(TARGET quake-simd POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${VORBIS_DLL} $<TARGET_FILE_DIR:quake-simd>
 			COMMAND_EXPAND_LISTS)
 	endif()
 	#libopusfile depends on libopus-0.dll
 	if (PC_OPUSFILE_FOUND AND OPUS_DLL)
-		add_custom_command(TARGET ironwail POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPUS_DLL} $<TARGET_FILE_DIR:ironwail>
+		add_custom_command(TARGET quake-simd POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPUS_DLL} $<TARGET_FILE_DIR:quake-simd>
 			COMMAND_EXPAND_LISTS)
 	endif()
 	#CURL wants zlib1.dll
 	if (CURL_FOUND AND ZLIB1_DLL)
-		add_custom_command(TARGET ironwail POST_BUILD
-				COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ZLIB1_DLL} $<TARGET_FILE_DIR:ironwail>
+		add_custom_command(TARGET quake-simd POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ZLIB1_DLL} $<TARGET_FILE_DIR:quake-simd>
 				COMMAND_EXPAND_LISTS)
 	endif()
 endif()

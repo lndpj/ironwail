@@ -43,8 +43,8 @@ qboolean SV_CheckBottom (edict_t *ent)
 	int		x, y;
 	float	mid, bottom;
 
-	VectorAdd (ent->v.origin, ent->v.mins, mins);
-	VectorAdd (ent->v.origin, ent->v.maxs, maxs);
+	vadd (3, mins, ent->v.origin, ent->v.mins);
+	vadd (3, maxs, ent->v.origin, ent->v.maxs);
 
 // if all of the points under the corners are solid world, don't bother
 // with the tougher checks
@@ -119,7 +119,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 
 // try the move
 	VectorCopy (ent->v.origin, oldorg);
-	VectorAdd (ent->v.origin, move, neworg);
+	vadd (3, neworg, ent->v.origin, move);
 
 // flying monsters don't step up
 	if ( (int)ent->v.flags & (FL_SWIM | FL_FLY) )
@@ -127,7 +127,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 	// try one move with vertical motion, then one without
 		for (i=0 ; i<2 ; i++)
 		{
-			VectorAdd (ent->v.origin, move, neworg);
+			vadd (3, neworg, ent->v.origin, move);
 			enemy = PROG_TO_EDICT(ent->v.enemy);
 			if (i == 0 && enemy != qcvm->edicts)
 			{
@@ -179,7 +179,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 	// if monster had the ground pulled out, go ahead and fall
 		if ( (int)ent->v.flags & FL_PARTIALGROUND )
 		{
-			VectorAdd (ent->v.origin, move, ent->v.origin);
+			vadd (3, ent->v.origin, ent->v.origin, move);
 			if (relink)
 				SV_LinkEdict (ent, true);
 			ent->v.flags = (int)ent->v.flags & ~FL_ONGROUND;

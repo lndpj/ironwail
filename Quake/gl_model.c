@@ -3885,7 +3885,7 @@ static qboolean MD5_BakeInfluences(const char *fname, bonepose_t *outposes, iqmv
 		for (i = 0; i < vinfo->count; i++, w++)
 		{
 			Matrix3x4_RM_Transform4(outposes[w->bone].mat, w->pos, pos);
-			VectorAdd(vert->xyz, pos, vert->xyz);
+			vadd(3, vert->xyz, vert->xyz, pos);
 
 			if (i < countof(weights))
 			{
@@ -3993,9 +3993,9 @@ static void MD5_ComputeNormals(iqmvert_t *vert, size_t numverts, unsigned short 
 		vsub(3,d2,v2->xyz, v0->xyz);
 		vcross3(norm, d2, d1);
 
-		VectorAdd(normals[i0], norm, normals[i0]);
-		VectorAdd(normals[i1], norm, normals[i1]);
-		VectorAdd(normals[i2], norm, normals[i2]);
+		vadd(3, normals[i0], normals[i0], norm);
+		vadd(3, normals[i1], normals[i1], norm);
+		vadd(3, normals[i2], normals[i2], norm);
 	}
 
 	for (v = 0; v < numverts; v++)
