@@ -9,3 +9,14 @@ Quake/ironwail
 build/
 /.vs
 /out/
+
+CMakeFiles
+CMakeCache.txt
+install_manifest.txt
+cmake_install.cmake
+Makefile
+
+quake-simd
+quake-simd.exe
+ironwail
+ironwail.exe
