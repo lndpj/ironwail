@@ -897,7 +897,7 @@ static void Host_CheckAutosave (void)
 		return;
 
 	// Only save when the player slows down a bit
-	speed = VectorLength (sv_player->v.velocity);
+	speed = vlen (sv_player->v.velocity);
 	if (speed > 100.f)
 		return;
 

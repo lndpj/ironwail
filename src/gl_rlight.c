@@ -320,7 +320,7 @@ loc0:
 				sback = vdot3(end, surf->plane->normal) - surf->plane->dist;
 			}
 			vsub(3,raydelta,end, rayorg);
-			dist = sfront / (sfront - sback) * VectorLength(raydelta);
+			dist = sfront / (sfront - sback) * vlen(raydelta);
 
 			if (!surf->samples)
 			{

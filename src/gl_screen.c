@@ -811,7 +811,7 @@ static void SCR_DrawSpeed (void)
 
 	VectorCopy (cl.velocity, vel);
 	vel[2] = 0;
-	speed = VectorLength (vel);
+	speed = vlen (vel);
 
 	if (speed > maxspeed)
 		maxspeed = speed;
