@@ -111,6 +111,13 @@ for(size_t i = 0; i < 3; i++) \
 	(dst)[i] = (a)[(1+i) % 3] * (b)[(2+i) % 3] - (a)[(2+i) % 3] * (b)[(1+i) % 3]; \
 } while(0)
 
+#define vinv(dst,n,v) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (v)[i]; \
+} while(0)
+
 #define vdot2(x,y)      ((x)[0]*(y)[0]+(x)[1]*(y)[1])
 #define vdot3(x,y)	((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2])
 #define vdot4(x,y)	((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2]+(x)[3]*(y)[3])
@@ -276,13 +283,6 @@ static FUNC_INLINE float Distance (const vec3_t a, const vec3_t b)
 	return sqrt (DistanceSquared (a, b));
 }
 
-static FUNC_INLINE void VectorInverse (vec3_t v)
-{
-	v[0] = -v[0];
-	v[1] = -v[1];
-	v[2] = -v[2];
-}
-
 static FUNC_INLINE void VectorScale (const vec3_t in, vec_t scale, vec3_t out)
 {
 	out[0] = in[0]*scale;
@@ -320,16 +320,6 @@ static FUNC_INLINE float GetClampedFraction (float val, float minval, float maxv
 {
 	val = GetFraction (val, minval, maxval);
 	return CLAMP (0.f, val, 1.f);
-}
-
-static FUNC_INLINE float Log2f (float val)
-{
-	return logf (val) * 1.44269504;
-}
-
-static FUNC_INLINE float Exp2f (float val)
-{
-	return expf (val * 0.693147181);
 }
 
 static FUNC_INLINE float GetLogFraction (float val, float minval, float maxval)

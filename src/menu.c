@@ -4037,11 +4037,11 @@ qboolean M_SetSliderValue (int option, float f)
 		Cvar_SetValueQuick (&r_scale, f);
 		return true;
 	case OPT_ANISO:
-		f = Exp2f (floor (f * Log2f (gl_max_anisotropy) + 0.5f));
+		f = exp2f (floor (f * log2f (gl_max_anisotropy) + 0.5f));
 		Cvar_SetValueQuick (&gl_texture_anisotropy, CLAMP (1, (int)f, (int)gl_max_anisotropy));
 		return true;
 	case OPT_FSAA:
-		f = Exp2f (floor (f * Log2f (framebufs.max_samples) + 0.5f));
+		f = exp2f (floor (f * log2f (framebufs.max_samples) + 0.5f));
 		Cvar_SetValueQuick (&vid_fsaa, CLAMP (1, (int)f, framebufs.max_samples));
 		return true;
 	case OPT_MOUSESPEED:	// mouse speed
