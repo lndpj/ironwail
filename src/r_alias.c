@@ -241,7 +241,7 @@ void R_SetupAliasLighting (entity_t	*e)
 		vsub(3,dist,e->origin, l->pos);
 		add = vdot3 (dist, dist);
 		if (l->radius * l->radius > add)
-			VectorMA (lightcolor, l->radius - sqrtf (add), l->color, lightcolor);
+			vsma (3, lightcolor, l->radius - sqrtf (add), l->color, lightcolor);
 	}
 
 	// minimum light value on gun (24)
@@ -592,9 +592,9 @@ static void R_DrawAliasModel_Real (entity_t *e, aliasmode_t mode)
 			fovscale = 1.f + (fovscale - 1.f) * cl_gun_fovscale.value;
 		}
 
-		VectorMA (lerpdata.origin, cl_gun_x.value * paliashdr->scale[0] * fovscale,	vright,	lerpdata.origin);
-		VectorMA (lerpdata.origin, cl_gun_y.value * paliashdr->scale[1] * fovscale,	vup,	lerpdata.origin);
-		VectorMA (lerpdata.origin, cl_gun_z.value * paliashdr->scale[2],			vpn,	lerpdata.origin);
+		vsma (3, lerpdata.origin, cl_gun_x.value * paliashdr->scale[0] * fovscale,	vright,	lerpdata.origin);
+		vsma (3, lerpdata.origin, cl_gun_y.value * paliashdr->scale[1] * fovscale,	vup,	lerpdata.origin);
+		vsma (3, lerpdata.origin, cl_gun_z.value * paliashdr->scale[2],			vpn,	lerpdata.origin);
 	}
 
 	//

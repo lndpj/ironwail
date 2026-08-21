@@ -996,7 +996,7 @@ void SV_Physics_Client (edict_t	*ent, int num)
 	case MOVETYPE_NOCLIP:
 		if (!SV_RunThink (ent))
 			return;
-		VectorMA (ent->v.origin, host_frametime, ent->v.velocity, ent->v.origin);
+		vsma (3, ent->v.origin, host_frametime, ent->v.velocity, ent->v.origin);
 		break;
 
 	default:
@@ -1050,8 +1050,8 @@ void SV_Physics_Noclip (edict_t *ent)
 	if (!SV_RunThink (ent))
 		return;
 
-	VectorMA (ent->v.angles, host_frametime, ent->v.avelocity, ent->v.angles);
-	VectorMA (ent->v.origin, host_frametime, ent->v.velocity, ent->v.origin);
+	vsma (3, ent->v.angles, host_frametime, ent->v.avelocity, ent->v.angles);
+	vsma (3, ent->v.origin, host_frametime, ent->v.velocity, ent->v.origin);
 
 	SV_LinkEdict (ent, false);
 }
@@ -1132,7 +1132,7 @@ void SV_Physics_Toss (edict_t *ent)
 		SV_AddGravity (ent);
 
 // move angles
-	VectorMA (ent->v.angles, host_frametime, ent->v.avelocity, ent->v.angles);
+	vsma (3, ent->v.angles, host_frametime, ent->v.avelocity, ent->v.angles);
 
 // move origin
 	VectorScale (ent->v.velocity, host_frametime, move);

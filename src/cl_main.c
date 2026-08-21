@@ -620,7 +620,7 @@ void CL_RelinkEntities (void)
 			dl->origin[2] += 16;
 			AngleVectors (ent->angles, fv, rv, uv);
 
-			VectorMA (dl->origin, 18, fv, dl->origin);
+			vsma (3, dl->origin, 18, fv, dl->origin);
 			dl->radius = 200 + (rand()&31);
 			dl->minlight = 32;
 			dl->die = cl.time + 0.1;
@@ -869,7 +869,7 @@ void CL_Tracepos_f (void)
 	if (cls.state != ca_connected)
 		return;
 
-	VectorMA(r_refdef.vieworg, 8192.0, vpn, v);
+	vsma(3, r_refdef.vieworg, 8192.0, vpn, v);
 	TraceLine(r_refdef.vieworg, v, w);
 
 	if (VectorLength(w) == 0)

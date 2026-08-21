@@ -75,6 +75,13 @@ for(size_t i = 0; i < n; i++) \
 	(dst)[i] = (a)[i] * (b)[i] + (c)[i]; \
 } while(0)
 
+#define vsma(n,a,s,b,dst) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = (a)[i] + s * (b)[i]; \
+} while(0)
+
 #define vset(dst,...) \
 do { \
 const size_t n = countargs(__VA_ARGS__); \
@@ -128,7 +135,6 @@ do\
 
 void VectorAngles (const vec3_t forward, vec3_t angles); //johnfitz
 
-void VectorMA (const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc);
 void VectorLerp (const vec3_t veca, const vec3_t vecb, float frac, vec3_t dst);
 
 int VectorCompare (const vec3_t v1, const vec3_t v2);

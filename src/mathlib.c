@@ -273,13 +273,6 @@ int VectorCompare (const vec3_t v1, const vec3_t v2)
 	return 1;
 }
 
-void VectorMA (const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc)
-{
-	vecc[0] = veca[0] + scale*vecb[0];
-	vecc[1] = veca[1] + scale*vecb[1];
-	vecc[2] = veca[2] + scale*vecb[2];
-}
-
 void VectorLerp (const vec3_t veca, const vec3_t vecb, float frac, vec3_t dst)
 {
 	dst[0] = LERP (veca[0], vecb[0], frac);

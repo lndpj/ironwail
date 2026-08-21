@@ -411,8 +411,8 @@ void R_GetEntityBounds (const entity_t *e, vec3_t mins, vec3_t maxs)
 	scalefactor = ENTSCALE_DECODE(e->scale);
 	if (scalefactor != 1.0f)
 	{
-		VectorMA (e->origin, scalefactor, minbounds, mins);
-		VectorMA (e->origin, scalefactor, maxbounds, maxs);
+		vsma (3, e->origin, scalefactor, minbounds, mins);
+		vsma (3, e->origin, scalefactor, maxbounds, maxs);
 	}
 	else
 	{
@@ -1340,11 +1340,11 @@ void R_EmitArrow (const vec3_t from, const vec3_t to, uint32_t color)
 	frac = realtime - floor (realtime);
 	VectorLerp (from, to, frac, center);
 
-	VectorMA (center, 8.f, side, tmp);
-	VectorMA (tmp, -8.f, dir, tmp);
+	vsma (3,center, 8.f, side, tmp);
+	vsma (3, tmp, -8.f, dir, tmp);
 	R_EmitLine (tmp, center, color);
 
-	VectorMA (tmp, -16.f, side, tmp);
+	vsma (3, tmp, -16.f, side, tmp);
 	R_EmitLine (tmp, center, color);
 }
 
@@ -1363,15 +1363,15 @@ static void R_EmitEdictLink (const edict_t *from, const edict_t *to, showbboxfla
 	VectorCopy (from->v.origin, vec_from);
 	if (!VectorCompare (from->v.mins, from->v.maxs))
 	{
-		VectorMA (vec_from, 0.5f, from->v.mins, vec_from);
-		VectorMA (vec_from, 0.5f, from->v.maxs, vec_from);
+		vsma (3, vec_from, 0.5f, from->v.mins, vec_from);
+		vsma (3, vec_from, 0.5f, from->v.maxs, vec_from);
 	}
 
 	VectorCopy (to->v.origin, vec_to);
 	if (!VectorCompare (to->v.mins, to->v.maxs))
 	{
-		VectorMA (vec_to, 0.5f, to->v.mins, vec_to);
-		VectorMA (vec_to, 0.5f, to->v.maxs, vec_to);
+		vsma (3, vec_to, 0.5f, to->v.mins, vec_to);
+		vsma (3, vec_to, 0.5f, to->v.maxs, vec_to);
 	}
 
 	if (flags == SHOWBBOX_LINK_BOTH)

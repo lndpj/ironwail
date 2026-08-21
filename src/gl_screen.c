@@ -1396,7 +1396,7 @@ static void SCR_DrawEdictInfo (void)
 
 	GL_SetCanvas (CANVAS_INFO);
 	SCR_SetupProjToCanvasMap (&proj2canvas);
-	VectorMA (r_origin, 8.f, vpn, crosshair);
+	vsma (3, r_origin, 8.f, vpn, crosshair);
 
 	// If a pointfile was loaded, print "Leak" at the beginning
 	if (VEC_SIZE (r_pointfile) != 0)

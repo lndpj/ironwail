@@ -261,20 +261,20 @@ static void R_DrawSpriteModel_Real (entity_t *e, qboolean showtris)
 	verts = batchverts + numbatchquads * 4;
 	++numbatchquads;
 
-	VectorMA (e->origin, frame->down * scale, s_up, verts[0].pos);
-	VectorMA (verts[0].pos, frame->left * scale, s_right, verts[0].pos);
+	vsma (3, e->origin, frame->down * scale, s_up, verts[0].pos);
+	vsma (3, verts[0].pos, frame->left * scale, s_right, verts[0].pos);
 	verts[0].uv[0] = 0.f;
 	verts[0].uv[1] = frame->tmax;
 
-	VectorMA (verts[0].pos, (frame->up - frame->down) * scale, s_up, verts[1].pos);
+	vsma (3, verts[0].pos, (frame->up - frame->down) * scale, s_up, verts[1].pos);
 	verts[1].uv[0] = 0.f;
 	verts[1].uv[1] = 0.f;
 
-	VectorMA (verts[1].pos, (frame->right - frame->left) * scale, s_right, verts[2].pos);
+	vsma (3, verts[1].pos, (frame->right - frame->left) * scale, s_right, verts[2].pos);
 	verts[2].uv[0] = frame->smax;
 	verts[2].uv[1] = 0.f;
 
-	VectorMA (verts[2].pos, (frame->down - frame->up) * scale, s_up, verts[3].pos);
+	vsma (3, verts[2].pos, (frame->down - frame->up) * scale, s_up, verts[3].pos);
 	verts[3].uv[0] = frame->smax;
 	verts[3].uv[1] = frame->tmax;
 }

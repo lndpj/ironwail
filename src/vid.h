@@ -34,50 +34,53 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // moved here for global use -- kristian
 typedef enum { MS_UNINIT, MS_WINDOWED, MS_FULLSCREEN } modestate_t;
 
-extern modestate_t	modestate;
+extern modestate_t modestate;
 
 // a pixel can be one, two, or four bytes
 typedef byte pixel_t;
 
 typedef struct vrect_s
 {
-	int	x, y, width, height;
+	int32_t x;
+	int32_t y;
+	int32_t width;
+	int32_t height;
 } vrect_t;
 
 typedef struct
 {
-	pixel_t		*colormap;	// 256 * VID_GRADES size
-	int			fullbright;	// index of first fullbright color
-	int			rowbytes;	// may be > width if displayed in a window
-	int			width;
-	int			height;
-	qboolean	resized;
-	int			maxscale;		// maximum r_scale value, based on height
-	int			refreshrate;
-	int			numpages;
-	int			recalc_refdef;	// if true, recalc vid-based stuff
-	int			conrowbytes;
-	int			conwidth;
-	int			conheight;
-	float		guipixelaspect;	// 2D pixel aspect ratio (1 = square)
-	int			guiwidth;		// 2D width
-	int			guiheight;		// 2D height
+	pixel_t	*colormap;       // 256 * VID_GRADES size
+	int32_t  fullbright;     // index of first fullbright color
+	int32_t  rowbytes;       // may be > width if displayed in a window
+	int32_t  width;
+	int32_t  height;
+	qboolean resized;
+	int32_t  maxscale;       // maximum r_scale value, based on height
+	int32_t  refreshrate;
+	int32_t  numpages;
+	int32_t  recalc_refdef;	 // if true, recalc vid-based stuff
+	int32_t  conrowbytes;
+	int32_t  conwidth;
+	int32_t  conheight;
+	float    guipixelaspect; // 2D pixel aspect ratio (1 = square)
+	int32_t  guiwidth;       // 2D width
+	int32_t  guiheight;      // 2D height
 } viddef_t;
 
-extern	viddef_t	vid;				// global video state
+extern	viddef_t vid;     // global video state
 
 typedef struct
 {
-	int			width;
-	int			height;
-	int			refreshrate;
-	int			bpp;
+	int32_t width;
+	int32_t height;
+	int32_t refreshrate;
+	int32_t bpp;
 } vmode_t;
 
 #define MAX_MODE_LIST	600 //johnfitz -- was 30
 
 extern	vmode_t	modelist[MAX_MODE_LIST];
-extern	int		nummodes;
+extern	int     nummodes;
 
 void	VID_Init (void); //johnfitz -- removed palette from argument list
 void	VID_Shutdown (void); // Called at shutdown
