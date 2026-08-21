@@ -346,7 +346,7 @@ int SV_FlyMove (edict_t *ent, float time, trace_t *steptrace)
 			}
 			vcross3 (dir,planes[0], planes[1]);
 			d = vdot3 (dir, ent->v.velocity);
-			VectorScale (dir, d, ent->v.velocity);
+			vscale (3, dir, d, ent->v.velocity);
 		}
 
 //
@@ -563,9 +563,9 @@ void SV_PushMove (edict_t *pusher, float movetime)
 						vec3_t check_center, pusher_center;
 
 						vadd (3, check_center, check->v.absmin, check->v.absmax);
-						VectorScale (check_center, 0.5f, check_center);
+						vscale (3, check_center, 0.5f, check_center);
 						vadd (3, pusher_center, pusher->v.absmin, pusher->v.absmax);
-						VectorScale (pusher_center, 0.5f, pusher_center);
+						vscale (3, pusher_center, 0.5f, pusher_center);
 
 						Con_Warning ("sv_gameplayfix_elevators nudged %s #%d at (%.0f %.0f %.0f) above %s #%d at (%.0f %.0f %.0f)\n",
 							PR_GetString (check->v.classname), NUM_FOR_EDICT (check), check_center[0], check_center[1], check_center[2],
@@ -766,7 +766,7 @@ void SV_WallFriction (edict_t *ent, trace_t *trace)
 
 // cut the tangential velocity
 	i = vdot3 (trace->plane.normal, ent->v.velocity);
-	VectorScale (trace->plane.normal, i, into);
+	vscale (3,trace->plane.normal, i, into);
 	vsub(3,side,ent->v.velocity, into);
 
 	ent->v.velocity[0] = side[0] * (1 + d);
@@ -1135,7 +1135,7 @@ void SV_Physics_Toss (edict_t *ent)
 	vsma (3, ent->v.angles, host_frametime, ent->v.avelocity, ent->v.angles);
 
 // move origin
-	VectorScale (ent->v.velocity, host_frametime, move);
+	vscale (3,ent->v.velocity, host_frametime, move);
 	trace = SV_PushEntity (ent, move);
 	if (trace.fraction == 1)
 		return;

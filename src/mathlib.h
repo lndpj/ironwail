@@ -139,7 +139,7 @@ do\
 	{\
 		_y.i = 0x5f3759df - (_number.i >> 1);\
 		_y.f = _y.f * (1.5f - (_number.f * 0.5f * _y.f * _y.f));\
-		VectorScale((_v), _y.f, (_v));\
+		vscale(3,(_v), _y.f, (_v));\
 	}\
 } while (0)
 
@@ -273,13 +273,12 @@ static FUNC_INLINE float VectorNormalize (vec3_t v)
 
 #define vdistsqr(n,a,b) ({ vec3_t ab; vsub(3,ab,b,a); vlensqr(ab); })
 #define vdist(n,a,b) sqrt(vdistsqr(n,a,b))
-
-static FUNC_INLINE void VectorScale (const vec3_t in, vec_t scale, vec3_t out)
-{
-	out[0] = in[0]*scale;
-	out[1] = in[1]*scale;
-	out[2] = in[2]*scale;
-}
+#define vscale(n,src,scale,dst) \
+do { \
+_Pragma("omp simd") \
+for(size_t i = 0; i < n; i++) \
+	(dst)[i] = scale * (src)[i]; \
+} while(0)
 
 static FUNC_INLINE int Q_log2(int val)
 {

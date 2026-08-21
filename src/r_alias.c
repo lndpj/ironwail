@@ -275,7 +275,7 @@ void R_SetupAliasLighting (entity_t	*e)
 	{
 		add = lightcolor[0] + lightcolor[1] + lightcolor[2];
 		if (add > 288.0f)
-			VectorScale(lightcolor, 288.0f / add, lightcolor);
+			vscale(3,lightcolor, 288.0f / add, lightcolor);
 	}
 	//hack up the brightness when fullbrights but no overbrights (256)
 	else if (e->model->flags & MOD_FBRIGHTHACK && gl_fullbrights.value)
@@ -285,7 +285,7 @@ void R_SetupAliasLighting (entity_t	*e)
 		lightcolor[2] = 256.0f;
 	}
 
-	VectorScale (lightcolor, 1.0f / 200.0f, lightcolor);
+	vscale (3, lightcolor, 1.0f / 200.0f, lightcolor);
 }
 
 /*

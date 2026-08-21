@@ -1452,7 +1452,7 @@ static void PF_aim (void)
 	{
 		vsub (3,dir,bestent->v.origin, ent->v.origin);
 		dist = vdot3 (dir, pr_global_struct->v_forward);
-		VectorScale (pr_global_struct->v_forward, dist, end);
+		vscale (3, pr_global_struct->v_forward, dist, end);
 		end[2] = dir[2];
 		VectorNormalize (end);
 		VectorCopy (end, G_VECTOR(OFS_RETURN));

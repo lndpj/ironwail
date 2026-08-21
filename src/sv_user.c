@@ -213,7 +213,7 @@ void DropPunchAngle (void)
 	len -= 10*host_frametime;
 	if (len < 0)
 		len = 0;
-	VectorScale (sv_player->v.punchangle, len, sv_player->v.punchangle);
+	vscale (3,sv_player->v.punchangle, len, sv_player->v.punchangle);
 }
 
 /*
@@ -244,7 +244,7 @@ void SV_WaterMove (void)
 	wishspeed = vlen(wishvel);
 	if (wishspeed > sv_maxspeed.value)
 	{
-		VectorScale (wishvel, sv_maxspeed.value/wishspeed, wishvel);
+		vscale (3,wishvel, sv_maxspeed.value/wishspeed, wishvel);
 		wishspeed = sv_maxspeed.value;
 	}
 	wishspeed *= 0.7;
@@ -258,7 +258,7 @@ void SV_WaterMove (void)
 		newspeed = speed - host_frametime * speed * sv_friction.value;
 		if (newspeed < 0)
 			newspeed = 0;
-		VectorScale (velocity, newspeed/speed, velocity);
+		vscale (3,velocity, newspeed/speed, velocity);
 	}
 	else
 		newspeed = 0;
@@ -313,7 +313,7 @@ void SV_NoclipMove (void)
 	if (vlen (velocity) > sv_maxspeed.value)
 	{
 		VectorNormalize (velocity);
-		VectorScale (velocity, sv_maxspeed.value, velocity);
+		vscale (3,velocity, sv_maxspeed.value, velocity);
 	}
 }
 
@@ -350,7 +350,7 @@ void SV_AirMove (void)
 	wishspeed = VectorNormalize(wishdir);
 	if (wishspeed > sv_maxspeed.value)
 	{
-		VectorScale (wishvel, sv_maxspeed.value/wishspeed, wishvel);
+		vscale (3,wishvel, sv_maxspeed.value/wishspeed, wishvel);
 		wishspeed = sv_maxspeed.value;
 	}
 

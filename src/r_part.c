@@ -407,7 +407,7 @@ void R_LavaSplash (vec3_t org)
 
 				VectorNormalize (dir);
 				vel = 50 + (rand()&63);
-				VectorScale (dir, vel, p->vel);
+				vscale (3, dir, vel, p->vel);
 			}
 }
 
@@ -446,7 +446,7 @@ void R_TeleportSplash (vec3_t org)
 
 				VectorNormalize (dir);
 				vel = 50 + (rand()&63);
-				VectorScale (dir, vel, p->vel);
+				vscale (3,dir, vel, p->vel);
 			}
 		}
 	}
