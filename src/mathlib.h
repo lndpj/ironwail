@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define __MATHLIB_H
 
 // mathlib.h
-
+#include <stdbit.h>
 #include <math.h>
 
 #ifndef M_PI
@@ -298,12 +298,13 @@ static FUNC_INLINE int Q_log2(int val)
 	return answer;
 }
 
-static FUNC_INLINE int Q_nextPow2(int val)
+static FUNC_INLINE int Q_bitceil(int val)
 {
 	val--;
 	val |= val >> 1;
 	val |= val >> 2;
 	val |= val >> 4;
+	val |= val >> 5;
 	val |= val >> 8;
 	val |= val >> 16;
 	val++;
@@ -323,17 +324,17 @@ static FUNC_INLINE float GetClampedFraction (float val, float minval, float maxv
 
 static FUNC_INLINE float Log2f (float val)
 {
-	return log (val) * 1.44269504;
+	return logf (val) * 1.44269504;
 }
 
 static FUNC_INLINE float Exp2f (float val)
 {
-	return exp (val * 0.693147181);
+	return expf (val * 0.693147181);
 }
 
 static FUNC_INLINE float GetLogFraction (float val, float minval, float maxval)
 {
-	return GetFraction (log (val), log (minval), log (maxval));
+	return GetFraction (logf (val), logf (minval), logf (maxval));
 }
 
 static FUNC_INLINE float GetClampedLogFraction (float val, float minval, float maxval)
@@ -344,7 +345,7 @@ static FUNC_INLINE float GetClampedLogFraction (float val, float minval, float m
 
 static FUNC_INLINE float LogLerp (float minval, float maxval, float t)
 {
-	return minval * exp (t * log (maxval / minval));
+	return minval * expf (t * logf (maxval / minval));
 }
 
 static FUNC_INLINE float EaseInOut (float t)

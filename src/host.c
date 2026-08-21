@@ -696,7 +696,7 @@ static void AsyncQueue_Init (asyncqueue_t *queue, size_t capacity)
 	if (!capacity)
 		capacity = 1024;
 	else
-		capacity = Q_nextPow2 (capacity);
+		capacity = Q_bitceil(capacity);
 	queue->capacity = capacity;
 	capacity *= sizeof (queue->procs[0]);
 	queue->procs = (asyncproc_t *) malloc (capacity);
