@@ -271,17 +271,8 @@ static FUNC_INLINE float VectorNormalize (vec3_t v)
 	return length;
 }
 
-static FUNC_INLINE float DistanceSquared (const vec3_t a, const vec3_t b)
-{
-	vec3_t ab;
-	vsub(3,ab,b,a);
-	return vlensqr (ab);
-}
-
-static FUNC_INLINE float Distance (const vec3_t a, const vec3_t b)
-{
-	return sqrt (DistanceSquared (a, b));
-}
+#define vdistsqr(n,a,b) ({ vec3_t ab; vsub(3,ab,b,a); vlensqr(ab); })
+#define vdist(n,a,b) sqrt(vdistsqr(n,a,b))
 
 static FUNC_INLINE void VectorScale (const vec3_t in, vec_t scale, vec3_t out)
 {

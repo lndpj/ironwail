@@ -1744,7 +1744,7 @@ Collinear
 */
 static qboolean Collinear (const vec3_t a, const vec3_t b, const vec3_t c)
 {
-	return Distance (a, b) + Distance (b, c) < Distance (a, c) * 1.00001f;
+	return vdist (3,a, b) + vdist(3,b, c) < vdist(3,a, c) * 1.00001f;
 }
 
 /*
