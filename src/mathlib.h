@@ -290,25 +290,167 @@ static FUNC_INLINE void VectorScale (const vec3_t in, vec_t scale, vec3_t out)
 	out[2] = in[2]*scale;
 }
 
-int Q_log2(int val);
-int Q_nextPow2(int val);
+static FUNC_INLINE int Q_log2(int val)
+{
+	int answer=0;
+	while (val>>=1)
+		answer++;
+	return answer;
+}
 
-float GetFraction (float val, float minval, float maxval);
-float GetClampedFraction (float val, float minval, float maxval);
+static FUNC_INLINE int Q_nextPow2(int val)
+{
+	val--;
+	val |= val >> 1;
+	val |= val >> 2;
+	val |= val >> 4;
+	val |= val >> 8;
+	val |= val >> 16;
+	val++;
+	return val;
+}
 
-float Log2f (float val);
-float Exp2f (float val);
-float GetLogFraction (float val, float minval, float maxval);
-float GetClampedLogFraction (float val, float minval, float maxval);
-float LogLerp (float minval, float maxval, float t);
+static FUNC_INLINE float GetFraction (float val, float minval, float maxval)
+{
+	return (val - minval) / (maxval - minval);
+}
 
-float EaseInOut (float t);
+static FUNC_INLINE float GetClampedFraction (float val, float minval, float maxval)
+{
+	val = GetFraction (val, minval, maxval);
+	return CLAMP (0.f, val, 1.f);
+}
 
-uint32_t Interleave0 (uint16_t x);
-uint32_t Interleave (uint16_t even, uint16_t odd);
-uint16_t DeinterleaveEven (uint32_t x);
-void DecodeMortonIndex (uint16_t index, int *x, int *y);
+static FUNC_INLINE float Log2f (float val)
+{
+	return log (val) * 1.44269504;
+}
 
+static FUNC_INLINE float Exp2f (float val)
+{
+	return exp (val * 0.693147181);
+}
+
+static FUNC_INLINE float GetLogFraction (float val, float minval, float maxval)
+{
+	return GetFraction (log (val), log (minval), log (maxval));
+}
+
+static FUNC_INLINE float GetClampedLogFraction (float val, float minval, float maxval)
+{
+	val = GetLogFraction (val, minval, maxval);
+	return CLAMP (0.f, val, 1.f);
+}
+
+static FUNC_INLINE float LogLerp (float minval, float maxval, float t)
+{
+	return minval * exp (t * log (maxval / minval));
+}
+
+static FUNC_INLINE float EaseInOut (float t)
+{
+	return t * t * (3.f - 2.f * t);
+}
+
+/*
+==================
+Interleave0
+
+Interleaves x with 16 0 bits
+==================
+*/
+static FUNC_INLINE uint32_t Interleave0 (uint16_t x)
+{
+	uint32_t ret = x;
+	ret = (ret ^ (ret << 8)) & 0x00FF00FF;
+	ret = (ret ^ (ret << 4)) & 0x0F0F0F0F;
+	ret = (ret ^ (ret << 2)) & 0x33333333;
+	ret = (ret ^ (ret << 1)) & 0x55555555;
+	return ret;
+}
+
+/*
+==================
+Interleave
+
+Interleaves 2 16-bit integers
+==================
+*/
+static FUNC_INLINE uint32_t Interleave (uint16_t even, uint16_t odd)
+{
+	return Interleave0 (even) | (Interleave0 (odd) << 1);
+}
+
+/*
+==================
+DeinterleaveEven
+
+Deinterleaves the even 16 bits of x (bits 0,2,4..28,30)
+==================
+*/
+static FUNC_INLINE uint16_t DeinterleaveEven (uint32_t x)
+{
+	x &= 0x55555555u;
+	x = (x ^ (x >> 1u)) & 0x33333333u;
+	x = (x ^ (x >> 2u)) & 0x0F0F0F0Fu;
+	x = (x ^ (x >> 4u)) & 0x00FF00FFu;
+	x = (x ^ (x >> 8u)) & 0x0000FFFFu;
+	return (uint16_t) x;
+}
+
+/*
+==================
+DecodeMortonIndex
+
+Extracts 2 8-bit coordinates from a 16-bit Z-order index
+==================
+*/
+static FUNC_INLINE void DecodeMortonIndex (uint16_t index, int *x, int *y)
+{
+	uint32_t evenodd = index | ((index >> 1) << 16);
+	index = DeinterleaveEven (evenodd);
+	*x = index & 255;
+	*y = index >> 8;
+}
+
+/*
+===================
+GreatestCommonDivisor
+====================
+*/
+static FUNC_INLINE intmax_t gcd (intmax_t i1, intmax_t i2)
+{
+	if (i1 > i2)
+	{
+		if (i2 == 0)
+			return (i1);
+		return gcd (i2, i1 % i2);
+	}
+	else
+	{
+		if (i1 == 0)
+			return (i2);
+		return gcd (i1, i2 % i1);
+	}
+}
+
+
+/*
+===================
+Invert24To16
+
+Inverts an 8.24 value to a 16.16 value
+====================
+*/
+
+static FUNC_INLINE fixed16_t Invert24To16(fixed16_t val)
+{
+	if (val < 256)
+		return (0xFFFFFFFF);
+
+	return (fixed16_t)
+			(((double)0x10000 * (double)0x1000000 / (double)val) + 0.5);
+}
 void R_ConcatRotations (float in1[3][3], float in2[3][3], float out[3][3]);
 void R_ConcatTransforms (float in1[3][4], float in2[3][4], float out[3][4]);
 
