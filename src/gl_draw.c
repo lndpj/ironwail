@@ -103,17 +103,21 @@ byte pic_crosshair_data[8][8] =
 };
 //johnfitz
 
+#pragma pack(push,1)
 typedef struct
 {
 	gltexture_t *gltexture;
 	float		sl, tl, sh, th;
 } glpic_t;
+#pragma pack(pop)
 
+#pragma pack(push,1)
 typedef struct guivertex_t {
 	vec2f_t		pos;
 	vec2f_t		uv;
 	rgba8888_t	color;
 } guivertex_t;
+#pragma pack(pop)
 
 #define MAX_BATCH_QUADS 2048
 
@@ -129,12 +133,14 @@ glcanvas_t glcanvas;
 //
 //==============================================================================
 
+#pragma pack(push,1)
 typedef struct cachepic_s
 {
 	char		name[MAX_QPATH];
 	qpic_t		pic;
 	byte		padding[32];	// for appended glpic
 } cachepic_t;
+#pragma pack(pop)
 
 #define	MAX_CACHED_PICS		512	//Spike -- increased to avoid csqc issues.
 cachepic_t menu_cachepics[MAX_CACHED_PICS];
